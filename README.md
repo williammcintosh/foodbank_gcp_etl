@@ -70,7 +70,7 @@ Create, configure and use a Google Cloud Platform (GCP) linux virtual machine (V
 # Write Python Script
 Develop a simple python program to gather the data programmatically.
 1. Run the line vim data_downloader.py .
-2. Paste the code from ` but be sure to update the values above to yours:
+2. Paste the code from `data_downloader.py` but be sure to update the values above to yours:
     * bucket_name
     * folder_name
     * bucket_key
@@ -105,5 +105,58 @@ Keeping your VM on continuously is a sure way to run out of GCP credits quickly,
     * One hour after the cron job
 10. Select Repeat Daily.
 11. Submit.
+
+# Connect Snowflake to Your GCP Bucket
+
+1. Go through the steps to get a snowflake account
+2. Create a new database
+    * I called mine `UK_FOOD_DONATION`
+3. Create a new SQL worksheet.
+4. Copy and paste the code from `GCP_STORAGE_INTEGRATION`.
+5. Run both blocks of code individually by highlighting and pressing Command+Enter.
+6. Once you run the `DESC ...` line, get the `property_value` for the `STORAGE_GCP_SERVICE_ACCOUNT` row and copy it.
+7. Go to GCP -> Cloud Storage.
+8. Check your bucket and click **Permissions** at the top.
+9. Click Add Principle
+10. Paste the `STORAGE_GCP_SERVICE_ACCOUNT` value.
+11. Assign the role `Storage Admin`.
+12. Save
+
+# Download the Foodbanks
+This creates a new table using the foodbanks data.
+1. Create a new SQL worksheet.
+2. Copy and paste the code from `CREATE_STAGE_FOODBANKS`.
+3. Run the blocks individually.
+
+# Download the Needs
+This creates a new table using the needs data.
+1. Create a new SQL worksheet.
+2. Copy and paste the code from `CREATE_STAGE_NEEDS`.
+3. Run the blocks individually.
+
+# Parse Needs Table
+This creates a new table for each individual item in the needs table instead of being in their long list format in a single table cell.
+1. Create a new SQL worksheet.
+2. Copy and paste the code from `PARSE_NEEDS_TABLE`.
+3. Run the blocks individually.
+
+# Match Foodbanks (Brute Force)
+This creates a new table that merges the foodbanks with the needs and excess. But there's an issue here because the foodbanks can be very far apart (200+ km).
+1. Create a new SQL worksheet.
+2. Copy and paste the code from `MATCH_FOODBANKS_RAW`.
+3. Run the blocks individually.
+
+# Calculate Distances
+This table calculates the distance between each foodbank from each other, a pair-wise comparison.
+1. Create a new SQL worksheet.
+2. Copy and paste the code from `MATCH_FOODBANKS_RAW`.
+3. Run the blocks individually.
+
+# Match Foodbanks (Brute Force)
+This creates a new table that merges the foodbanks with the needs and excess. But there's an issue here because the foodbanks can be very far apart (200+ km).
+1. Create a new SQL worksheet.
+2. Copy and paste the code from `MATCHES_W_DISTANCES`.
+3. Run the blocks individually.
+
 
 
