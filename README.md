@@ -152,7 +152,7 @@ This table calculates the distance between each foodbank from each other, a pair
 2. Copy and paste the code from `MATCH_FOODBANKS_RAW`.
 3. Run the blocks individually.
 
-# Match Foodbanks (Brute Force)
+# Match Foodbanks (By Distance)
 This creates a new table that merges the foodbanks with the needs and excess. But there's an issue here because the foodbanks can be very far apart (200+ km).
 1. Create a new SQL worksheet.
 2. Copy and paste the code from `MATCHES_W_DISTANCES`.
