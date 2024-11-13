@@ -158,5 +158,18 @@ This creates a new table that merges the foodbanks with the needs and excess. Bu
 2. Copy and paste the code from `MATCHES_W_DISTANCES`.
 3. Run the blocks individually.
 
+# --- New Challenge! ---
+
+![New Challenger Approaches](https://drive.google.com/uc?export=view&id=1KDa0y1yRwhsXmXAhfpt3IdcE6LRecWFU)
+
+Let's do everything in GCP! Who needs Snowflake!?
+
+# VM Permissions
+You need to give your VM permissions to access the SQL database.
+1. Go to Virtual Machines in GCP.
+2. Stop the virtual machine.
+3. Go to the specific VM instance details -> edit.
+4. Check under “Cloud API access scopes”.
+5. Set this to “Allow full access to all Cloud APIs”.
 
 
