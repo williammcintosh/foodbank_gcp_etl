@@ -2,6 +2,12 @@
 
 Author - Will McIntosh
 
+# Data Origin
+
+This data comes from GiveFood which maintains the largest publicly available database of food banks in the UK and currently cover nearly 3000 locations. Their data is used by governments, councils, universities, supermarkets, political parties, the NHS, food manufacturers, hundreds of national & local news websites, apps & the Trussell Trust.
+
+https://github.com/givefood/data/
+
 # Create VM in GCP
 Create, configure and use a Google Cloud Platform (GCP) linux virtual machine (VM).
 1. Go to https://console.cloud.google.com/ .
