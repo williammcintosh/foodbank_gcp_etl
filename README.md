@@ -178,4 +178,7 @@ You need to give your VM permissions to access the SQL database.
 4. Check under “Cloud API access scopes”.
 5. Set this to “Allow full access to all Cloud APIs”.
 
+# Cloud Run Functions Permissions
+You need to add the code to Cloud Run Functions which will allow you to grab a secret from Google Secrets API and pass that information into your html or js code without writing in sensitive information.
+
 
