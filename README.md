@@ -180,5 +180,85 @@ You need to give your VM permissions to access the SQL database.
 
 # Cloud Run Functions Permissions
 You need to add the code to Cloud Run Functions which will allow you to grab a secret from Google Secrets API and pass that information into your html or js code without writing in sensitive information.
+1. Go to Google Cloud Run Functions.
+2. Enable.
+3. Write a new one, I called mine google-maps-api-key.
 
+# Allow Full Access First, Then Limit By Domain
+Open the terminal anywhere from GCP in the top right and type this in:
+```
+gcloud functions add-invoker-policy-binding [NAME_OF_YOUR_GOOGLE_CLOUD_RUN_FUNCTION \
+      --region="australia-southeast1" \
+      --member="allUsers"
+```
+Make sure to change the name of you function.
+
+# Set Invoker Permissions for Cloud Run
+Since Cloud Run manages permissions slightly differently than Cloud Functions, follow these steps if your function is listed under Cloud Run:
+1. Click on the service in the Cloud Run interface.
+2. Go to the Permissions tab.
+3. Click Add principal.
+4. Enter allUsers in the principal field.
+5. Select the role Cloud Run Invoker.
+6. Click Save to apply the permissions.
+
+# Address the Secret Manager Access Issue
+Grant Secret Manager Access: Since your function now triggers without permission issues but fails due to Secret Manager access, ensure the correct permissions are set.
+1. Navigate to Secret Manager in the Google Cloud Console.
+2. Click on the secret that needs to be accessed.
+3. Click Permissions.
+4. Click Add principal.
+5. Enter the email of the service account used by your Cloud Run service, which you can find under the Details or Permissions tab of your Cloud Run service.
+6. Select the role Secret Manager Secret Accessor and save.
+
+# Test If It Works
+Let's make sure the Cloud Run Function does what we want.
+1. Go to Google Cloud Run Function.
+2. Click on your Function.
+3. Click on the Trigger tab.
+4. Find the url copy it.
+5. paste it in a browser.
+6. You should see the result of your secret info.
+
+# Limit To Just Your Domain
+Now that we know it works we will limit to just our specific domain, in my case it's 'https://ahead.nz*'. This means that only requests coming from that domain will be permitted access to collect that api information.
+1. Go to Google Cloud Run Function.
+2. Click on your Function.
+3. Edit the function, go to the code.
+4. Change the cors:
+    ```
+    const corsOptions = {
+       origin: '*', // This should allow all origins for now
+       // origin: ['https://ahead.nz', 'https://www.ahead.nz', 'http://ahead.nz', 'http://www.ahead.nz'],
+       optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+    };
+    ```
+5. Change The origin to your domains.
+6. Update the functions.http just below this:
+   ```
+   functions.http('getdbcreds', (req, res) => {
+    corsHandler(req, res, async () => {
+    // Check referer header
+    const allowedDomains = ['https://ahead.nz', 'https://www.ahead.nz'];
+    const referer = req.headers.referer;
+
+    if (!allowedDomains.some(domain => referer.startsWith(domain))) {
+      res.status(403).send('Access denied');
+      return;
+    }
+   
+    try {
+      const [version] = await client.accessSecretVersion({
+        name: 'projects/uk-food-donation/secrets/sql-dbname/versions/latest'
+      });
+
+      const dbname = version.payload.data.toString('utf8');
+      res.status(200).send({ dbname });
+    } catch (error) {
+      res.status(500).send(`Error retrieving the API key: ${error.message}`);
+    }
+     });
+   });
+   ```
+7. Remove the other functions.https that was there before.
 
